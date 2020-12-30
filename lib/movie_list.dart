@@ -1,5 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:movies/http_helper.dart';
+import 'package:movies/movie_detail.dart';
 
 import 'movie.dart';
 
@@ -7,6 +8,8 @@ class MovieList extends StatefulWidget {
   @override
   _MovieListState createState() => _MovieListState();
 }
+const String defaultImageUrl =
+    'https://images.freeimages.com/images/large-previews/5eb/movie-clapboard-1184339.jpg';
 
 class _MovieListState extends State<MovieList> {
   List<Movie> movies;
@@ -14,8 +17,6 @@ class _MovieListState extends State<MovieList> {
   HttpHelper helper;
 
   final String iconBaseUrl = 'https://image.tmdb.org/t/p/w92/';
-  final String defaultImageUrl =
-      'https://images.freeimages.com/images/large-previews/5eb/movie-clapboard-1184339.jpg';
 
   @override
   void initState() {
@@ -57,6 +58,12 @@ class _MovieListState extends State<MovieList> {
               title: Text('${currentItem.title}'),
               subtitle: Text(
                   'Released: ${currentItem.releaseDate} - Vote: ${currentItem.voteAverage.toString()}'),
+              onTap: () {
+                MaterialPageRoute movieDetailRoute = MaterialPageRoute(
+                  builder: (_) => MovieDetail(currentItem)
+                );
+                Navigator.push(context, movieDetailRoute);
+              },
             ),
           );
         },
