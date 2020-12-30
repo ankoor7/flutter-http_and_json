@@ -13,6 +13,10 @@ class _MovieListState extends State<MovieList> {
   int movieCount;
   HttpHelper helper;
 
+  final String iconBaseUrl = 'https://image.tmdb.org/t/p/w92/';
+  final String defaultImageUrl =
+      'https://images.freeimages.com/images/large-previews/5eb/movie-clapboard-1184339.jpg';
+
   @override
   void initState() {
     helper = HttpHelper();
@@ -29,6 +33,9 @@ class _MovieListState extends State<MovieList> {
     });
   }
 
+  StatelessWidget posterIcon(String src) =>
+      CircleAvatar(backgroundImage: NetworkImage(src));
+
   @override
   Widget build(BuildContext context) {
     return Scaffold(
@@ -39,13 +46,18 @@ class _MovieListState extends State<MovieList> {
         itemCount: (this.movieCount == null) ? 0 : this.movieCount,
         itemBuilder: (BuildContext context, int position) {
           final Movie currentItem = movies[position];
+          final String imageSrc = currentItem.posterPath != null
+              ? '$iconBaseUrl${currentItem.posterPath}'
+              : defaultImageUrl;
           return Card(
-              color: Colors.white,
-              elevation: 2,
-              child: ListTile(
-                title: Text('${currentItem.title}'),
-                subtitle: Text('Released: ${currentItem.releaseDate} - Vote: ${currentItem.voteAverage.toString()}'),
-              ),
+            color: Colors.white,
+            elevation: 2,
+            child: ListTile(
+              leading: posterIcon(imageSrc),
+              title: Text('${currentItem.title}'),
+              subtitle: Text(
+                  'Released: ${currentItem.releaseDate} - Vote: ${currentItem.voteAverage.toString()}'),
+            ),
           );
         },
       ),
